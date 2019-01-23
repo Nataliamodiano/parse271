@@ -72,6 +72,13 @@ namespace eligRequest
             System.Console.ReadLine();  
         }
 
+        public static string getNextSeg()
+        {
+            currentLine = getNextLine();
+            currentSeg = getSeg(currentLine, 0);
+            return currentSeg;
+        }
+
         public static void LoopISA()
         {
             inLoopISA = true;
@@ -79,16 +86,14 @@ namespace eligRequest
             currentSeg = getSeg(currentLine, 0);
             if (currentSeg == "ISA")
             {
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
                 while (currentSeg == "GS")
                 {
                     LoopGS();
                 }
 
                 ////////////////////////shouldnt i get the next line here??
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
 
                 if (currentSeg != "IEA") // IEA is the closing segment to ISA
                 {
@@ -104,8 +109,7 @@ namespace eligRequest
             inLoopGS = true;
             if ((getSeg(currentLine, 8) == "004010X092A1") || (getSeg(currentLine,8) == "005010X279A1"))
             {
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
 
                 while (currentSeg == "ST") 
                 {
@@ -124,8 +128,7 @@ namespace eligRequest
         {
             inLoopST = true;
             // It should never be a 999 anymore since we're taking care of the 999s on the EmdeonChat before sending it to ParseElig
-            currentLine = getNextLine();
-            currentSeg = getSeg(currentLine, 0);
+            getNextSeg();
 
             if (currentSeg == "BHT") 
             {
@@ -134,8 +137,7 @@ namespace eligRequest
                 Console.WriteLine("                        ELIGIBILITY - " + outputDate(DateTranCrea)); //////////////////// writeln
                 Console.WriteLine(""); //////////////////// writeln
 
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
             while ((currentSeg == "HL") && (getSeg(currentLine, 3) == "20")) 
             {
@@ -156,8 +158,7 @@ namespace eligRequest
             if (currentSeg == "SE")
             {
                 //////////////////////// why do nothing here? dont i need to get the next line?
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
                 ///////////////////////////
             } 
             else
@@ -170,13 +171,11 @@ namespace eligRequest
         public static void Loop2000A() //Information Source Level
         {
             inLoop2000A = true;
-            currentLine = getNextLine();
-            currentSeg = getSeg(currentLine, 0);
+            getNextSeg();
             if (currentSeg == "AAA")
             {
                 aaa();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "NM1")
@@ -193,29 +192,25 @@ namespace eligRequest
             if (currentSeg == "NM1")
             {
                 nm1();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "REF")
             {
                 reff();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "PER")
             {
                 per();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "AAA")
             {
-                aaa(); 
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                aaa();
+                getNextSeg();
             }
             inLoop2100A = false;
         }
@@ -225,8 +220,7 @@ namespace eligRequest
             inLoop2000B = true;
             if (getSeg(currentLine, 3) == "21")
             {
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
 
                 if (currentSeg == "NM1")
                 {
@@ -242,43 +236,37 @@ namespace eligRequest
             if (currentSeg == "NM1")
             {
                 nm1();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "REF")
             {
                 reff();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "N3")
             {
                 n3();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "N4")
             {
                 n4();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "AAA")
             {
                 aaa();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "PRV")
             {
                 prv();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
             inLoop2100B = false;
         }
@@ -288,15 +276,13 @@ namespace eligRequest
             inLoop2000C = true;
             if ((currentSeg == "HL") && (getSeg(currentLine, 3) == "22")) 
             {
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
 
                 while (currentSeg == "TRN")
                 {
                     traceNumber = getSeg(currentLine, 2);
                     //addToBothCSVs(header,'TraceNumber',traceNumber); //////////////////// addToBothCSVs
-                    currentLine = getNextLine();
-                    currentSeg = getSeg(currentLine, 0);
+                    getNextSeg();
                 }
 
                 if (currentSeg == "NM1")
@@ -313,85 +299,73 @@ namespace eligRequest
             if (getSeg(currentLine, 1) == "IL")
             {
                 nm1();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "REF")
             {
                 reff();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "N3")
             {
                 n3();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "N4")
             {
                 n4();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0); 
+                getNextSeg(); 
             }
 
             while (currentSeg == "PER")      //contact information        - no longer in 5010
             {
                 per();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "AAA")     //subscriber request validation
             {
                 aaa();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "PRV") 
             {
                 prv();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "DMG")     //Subscriber demographic information
             {
                 dmg();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "INS")     //Subscriber relationship
             {
                 ins();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "HI") 
             {
                 hi();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "DTP")     //Subscriber date
             {
                 dtp();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "MPI") 
             {
                 mpi();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "EB")
@@ -407,43 +381,37 @@ namespace eligRequest
             if (currentSeg == "EB") 
             {
                 eb();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "HSD")
             {
                 hsd();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "REF")
             {
                 reff();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "DTP")
             {
                 dtp();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "AAA")
             {
                 aaa();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
            
             while (currentSeg == "MSG")
             {
                 msg();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "III")
@@ -459,8 +427,7 @@ namespace eligRequest
                  //output 2 spaces before the next NM101;   
                     Console.WriteLine("  "); //////////////////// write
                 }
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "NM1") 
@@ -474,8 +441,7 @@ namespace eligRequest
                 {
                     //great, do nothing;
                 }
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             inLoop2110C = false;
@@ -487,8 +453,7 @@ namespace eligRequest
             if (currentSeg == "III")
             {
                 iii();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
             inLoop2115C = false;
         }
@@ -499,36 +464,31 @@ namespace eligRequest
             while (currentSeg == "NM1")
             {
                 nm1();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "N3") 
             {
                 n3();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "N4") 
             {
                 n4();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "PER") //contact information
             {
                 per();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "PRV") 
             {
                 prv();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             inLoop2120C = false;
@@ -539,15 +499,13 @@ namespace eligRequest
             inLoop2000D = true;
             if ((currentSeg == "HL") && (getSeg(currentLine, 3) == "23"))
             {
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
 
                 while (currentSeg == "TRN")
                 {
                     dependentTaceNumber = getSeg(currentLine, 2);
                     Console.WriteLine("dependentTaceNumber: " + dependentTaceNumber);
-                    currentLine = getNextLine();
-                    currentSeg = getSeg(currentLine, 0);
+                    getNextSeg();
                 }
 
                 if (currentSeg == "NM1")
@@ -564,85 +522,73 @@ namespace eligRequest
             if ((currentSeg == "NM1") && (getSeg(currentLine, 1) == "03"))
             {
                 nm1();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "REF")
             {
                 reff();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "N3")
             {
                 n3();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "N4")
             {
                 n4();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "PER") //contact information
             {
                 per();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "AAA") //dependent request validation
             {
                 aaa();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "PRV")
             {
                 prv();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "DMG") //dependent demographic information
             {
                 dmg();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "INS") //dependent relationship
             {
                 ins();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "HI")
             {
                 hi();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "DTP")     //dependent date
             {
                 dtp();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "MPI")
             {
                 mpi();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "EB")
@@ -658,43 +604,37 @@ namespace eligRequest
             if (currentSeg == "EB")
             {
                 eb();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "HSD")
             {
                 hsd();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "REF")
             {
                 reff();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "DTP")
             {
                 dtp();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "AAA")
             {
                 aaa();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "MSG")
             {
                 msg();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "III")
@@ -708,8 +648,7 @@ namespace eligRequest
                 { 
                     // great, do nothing
                 }
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "NM1")
@@ -723,8 +662,7 @@ namespace eligRequest
                 { 
                     // great, do nothing
                 }
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
             inLoop2110D = false;
         }
@@ -735,8 +673,7 @@ namespace eligRequest
             if (currentSeg == "III")
             {
                 iii();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
             inLoop2115D = false;
         }
@@ -747,36 +684,31 @@ namespace eligRequest
             while (currentSeg == "NM1")
             {
                 nm1();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "N3")
             {
                 n3();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "N4")
             {
                 n4();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             while (currentSeg == "PER") //contact information
             {
                 per();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
 
             if (currentSeg == "PRV")
             {
                 prv();
-                currentLine = getNextLine();
-                currentSeg = getSeg(currentLine, 0);
+                getNextSeg();
             }
             inLoop2120D = false;
         }
@@ -1519,7 +1451,7 @@ namespace eligRequest
         {
             // inc(index);
             if ((currentLine != "") && (currentLine[currentLine.Length - 1 ] == segmentDelim))
-            {
+            {currentLine = getNextLine();
                 currentLine = currentLine.TrimEnd(segmentDelim);
             }
             return GetVal("|" + delim + "|" + currentLine, index);
