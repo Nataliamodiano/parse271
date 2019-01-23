@@ -52,8 +52,6 @@ namespace eligRequest
             {
                 currentLine = line;
 
-                //System.Console.WriteLine(currentLine);
-
                 // determine delimiters
                 segmentDelim = System.Convert.ToChar(currentLine.Substring(105, 1)); // ~
                 elementDelim = System.Convert.ToChar(currentLine.Substring(3, 1)); // *
@@ -92,12 +90,10 @@ namespace eligRequest
                     LoopGS();
                 }
 
-                ////////////////////////shouldnt i get the next line here??
                 getNextSeg();
 
                 if (currentSeg != "IEA") // IEA is the closing segment to ISA
                 {
-                    // error missing IEA
                     Console.WriteLine("Missing IEA"); //////////////////// ERROR
                 }  
             }
@@ -157,9 +153,7 @@ namespace eligRequest
             }
             if (currentSeg == "SE")
             {
-                //////////////////////// why do nothing here? dont i need to get the next line?
                 getNextSeg();
-                ///////////////////////////
             } 
             else
             { 
@@ -791,7 +785,6 @@ namespace eligRequest
                 // addToBothCSVs(header,'DependentNameFirst',nameFirst); //////////////////// addToBothCSVs
             }
 
-            // line to write
             string lineToWrite = "";
             lineToWrite = entityIdentifierCode + ": ";
             if (nameLast != "")
