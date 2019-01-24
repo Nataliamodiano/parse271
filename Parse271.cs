@@ -1444,7 +1444,8 @@ namespace eligRequest
         {
             // inc(index);
             if ((currentLine != "") && (currentLine[currentLine.Length - 1 ] == segmentDelim))
-            {currentLine = getNextLine();
+            {
+                currentLine = getNextLine();
                 currentLine = currentLine.TrimEnd(segmentDelim);
             }
             return GetVal("|" + delim + "|" + currentLine, index);
@@ -1483,13 +1484,6 @@ namespace eligRequest
                     s2 = s2.Remove(0, 1);
                     s3 = s2;
                     s2 = s2.Replace("\"\"", "¾¾");
-                    /*                    j = s2.IndexOf("\"\"");
-                                        while (j != -1)
-                                        {
-                                            s2[j] = "¾";
-                                            s2[j+1] = "¾";
-                                            j = s2.IndexOf("\"\"");
-                                        }*/
                     s = '"' + d;
                 }
                 else
@@ -1504,13 +1498,6 @@ namespace eligRequest
                 s2 = s2 + d;
             }
             result = result.Replace("¾¾", "\"");
-            /*            j = result.IndexOf("¾¾");
-                        while (j != -1)
-                        {
-                            result[j] = '"';
-                            result.Remove(j+1,1);
-                            j = result.IndexOf("¾¾");
-                        }*/
             return result.Trim();
         }
     }
