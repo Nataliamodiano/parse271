@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace eligRequest
 {
-    public class elig271 {
-
-        public class objST {
+    public class elig271
+    {
+        public class objST
+        {
             public string DateTranCrea { get; set; }
         }
 
-        public class objAaa {
+        public class objAaa
+        {
             public string validRequestIndicatorY { get; set; }
             public string validRequestIndicatorN { get; set; }
             public string rejectReasonCode { get; set; }
@@ -21,37 +23,45 @@ namespace eligRequest
             public string followUpAction { get; set; }
         }
 
-        public class objNm1 {
+        public class objNm1
+        {
             public string lineToWrite { get; set; }
         }
 
-        public class objN3 {
+        public class objN3
+        {
             public string address1 { get; set; }
             public string address2 { get; set; }
         }
 
-        public class objN4 {
+        public class objN4
+        {
             public string cityStateZip { get; set; }
         }
 
-        public class objDmg {
+        public class objDmg
+        {
             public string birthDate { get; set; }
             public string gender { get; set; }
         }
 
-        public class objDtp {
+        public class objDtp
+        {
             public string dateTimeTotal { get; set; }
         }
 
-        public class objPrv {
+        public class objPrv
+        {
             public string prvWrite { get; set; }
         }
 
-        public class objIii {
+        public class objIii
+        {
             public string iiiWrite { get; set; }
         }
 
-        public class objEb {
+        public class objEb
+        {
             public string serviceTypeCodeWrite { get; set; }
             public string eligibilityInfo { get; set; }
             public string coverageLevelCode { get; set; }
@@ -71,27 +81,32 @@ namespace eligRequest
             public string diagPointer { get; set; }
         }
 
-        public class objHsd {
+        public class objHsd
+        {
             public string quant { get; set; }
         }
 
-        public class objMsg {
+        public class objMsg
+        {
             public string freeFormMessageText { get; set; }
         }
 
-        public class objReff {
+        public class objReff
+        {
             public string refWrite { get; set; }
             public string refName { get; set; }
         }
 
-        public class objIns {
+        public class objIns
+        {
             public string insNote { get; set; }
             public string studentStatusCode { get; set; }
             public string handicapIndicator { get; set; }
             public string birthSequenceNumber { get; set; }
         }
 
-        public class objPer {
+        public class objPer
+        {
             public string contactName { get; set; }
             public string communicationNumberQual { get; set; }
             public string communicationNumberQual2 { get; set; }
@@ -101,7 +116,6 @@ namespace eligRequest
 
     class Program
     {
-
         public static string line;
         public static string currentLine;
         public static string currentSeg;
@@ -122,7 +136,7 @@ namespace eligRequest
         public static bool inLoop2110D;
         public static bool inLoop2115D;
         public static bool inLoop2120D;
-        public static string InsName;        
+        public static string InsName;
         public static string traceNumber;
         public static string dependentTaceNumber;
         public static string lastEB = ""; //////////// not sure where this var is initialized
@@ -136,6 +150,8 @@ namespace eligRequest
 
         // Read the file
         public static System.IO.StreamReader file = new System.IO.StreamReader(@"C:\home\271.txt");
+
+        public static List<String> elig271List = new List<String>();
 
         static void Main(string[] args)
         {
@@ -154,12 +170,14 @@ namespace eligRequest
                 {
                     LoopISA();
                 }
-            }    
+            }
+
+            elig271List.ForEach(Console.WriteLine); // print list to console
 
             file.Close();
 
             // Suspend the screen.  
-            System.Console.ReadLine();  
+            System.Console.ReadLine();
         }
 
         public static string getNextSeg()
@@ -187,7 +205,7 @@ namespace eligRequest
                 if (currentSeg != "IEA") // IEA is the closing segment to ISA
                 {
                     Console.WriteLine("Missing IEA"); //////////////////// ERROR
-                }  
+                }
             }
             inLoopISA = false;
         }
@@ -195,11 +213,11 @@ namespace eligRequest
         public static void LoopGS()
         {
             inLoopGS = true;
-            if ((getSeg(currentLine, 8) == "004010X092A1") || (getSeg(currentLine,8) == "005010X279A1"))
+            if ((getSeg(currentLine, 8) == "004010X092A1") || (getSeg(currentLine, 8) == "005010X279A1"))
             {
                 getNextSeg();
 
-                while (currentSeg == "ST") 
+                while (currentSeg == "ST")
                 {
                     LoopST();
                 }
@@ -218,20 +236,20 @@ namespace eligRequest
             // It should never be a 999 anymore since we're taking care of the 999s on the EmdeonChat before sending it to ParseElig
             getNextSeg();
 
-            if (currentSeg == "BHT") 
+            if (currentSeg == "BHT")
             {
-                var DateTranCrea = getSeg(currentLine, 4); 
+                var DateTranCrea = getSeg(currentLine, 4);
                 //addToBothCSVs(header,'DateCreated',outputDate(DateTranCrea)); //////////////////// addToBothCSVs
 
                 elig271.objST objST = new elig271.objST();
                 objST.DateTranCrea = outputDate(DateTranCrea);
-                Console.WriteLine("                        ELIGIBILITY - " + objST.DateTranCrea); //////////////////// writeln OBJ
-
-                Console.WriteLine(""); //////////////////// writeln
+                //Console.WriteLine("                        ELIGIBILITY - " + objST.DateTranCrea); //////////////////// writeln OBJ
+                elig271List.Add("                        ELIGIBILITY - " + objST.DateTranCrea);
+                //Console.WriteLine(""); //////////////////// writeln
 
                 getNextSeg();
             }
-            while ((currentSeg == "HL") && (getSeg(currentLine, 3) == "20")) 
+            while ((currentSeg == "HL") && (getSeg(currentLine, 3) == "20"))
             {
                 Loop2000A();
             }
@@ -250,9 +268,9 @@ namespace eligRequest
             if (currentSeg == "SE")
             {
                 getNextSeg();
-            } 
+            }
             else
-            { 
+            {
                 Console.WriteLine("Error missing SE"); //////////////////// ERROR
             }
             inLoopST = false;
@@ -321,7 +339,7 @@ namespace eligRequest
         }
 
         public static void Loop2100B()  //Information Receiver Name
-        { 
+        {
             inLoop2100B = true;
             if (currentSeg == "NM1")
             {
@@ -362,9 +380,9 @@ namespace eligRequest
         }
 
         public static void Loop2000C() //Subscriber level
-        { 
+        {
             inLoop2000C = true;
-            if ((currentSeg == "HL") && (getSeg(currentLine, 3) == "22")) 
+            if ((currentSeg == "HL") && (getSeg(currentLine, 3) == "22"))
             {
                 getNextSeg();
 
@@ -384,7 +402,7 @@ namespace eligRequest
         }
 
         public static void Loop2100C()  //Subscriber Name
-        { 
+        {
             inLoop2100C = true;
             if (getSeg(currentLine, 1) == "IL")
             {
@@ -407,7 +425,7 @@ namespace eligRequest
             if (currentSeg == "N4")
             {
                 n4();
-                getNextSeg(); 
+                getNextSeg();
             }
 
             while (currentSeg == "PER")      //contact information        - no longer in 5010
@@ -422,7 +440,7 @@ namespace eligRequest
                 getNextSeg();
             }
 
-            if (currentSeg == "PRV") 
+            if (currentSeg == "PRV")
             {
                 prv();
                 getNextSeg();
@@ -440,7 +458,7 @@ namespace eligRequest
                 getNextSeg();
             }
 
-            if (currentSeg == "HI") 
+            if (currentSeg == "HI")
             {
                 hi();
                 getNextSeg();
@@ -452,7 +470,7 @@ namespace eligRequest
                 getNextSeg();
             }
 
-            if (currentSeg == "MPI") 
+            if (currentSeg == "MPI")
             {
                 mpi();
                 getNextSeg();
@@ -466,9 +484,9 @@ namespace eligRequest
         }
 
         public static void Loop2110C() //SUBSCRIBER ELIGIBILITY OR BENEFIT INFORMATION
-        { 
+        {
             inLoop2110C = true;
-            if (currentSeg == "EB") 
+            if (currentSeg == "EB")
             {
                 eb();
                 getNextSeg();
@@ -497,7 +515,7 @@ namespace eligRequest
                 aaa();
                 getNextSeg();
             }
-           
+
             while (currentSeg == "MSG")
             {
                 msg();
@@ -509,24 +527,24 @@ namespace eligRequest
                 Loop2115C();
             }
 
-            if (currentSeg == "LS") 
+            if (currentSeg == "LS")
             {
                 //this must have the value of "2120"
-                if (getSeg(currentLine, 1) == "2120") 
+                if (getSeg(currentLine, 1) == "2120")
                 {
-                 //output 2 spaces before the next NM101;   
+                    //output 2 spaces before the next NM101;   
                     Console.WriteLine("  "); //////////////////// write
                 }
                 getNextSeg();
             }
 
-            if (currentSeg == "NM1") 
-            {    
+            if (currentSeg == "NM1")
+            {
                 Loop2120C();
             }
 
-            if (currentSeg == "LE") 
-            {    
+            if (currentSeg == "LE")
+            {
                 if (getSeg(currentLine, 1) == "2120")
                 {
                     //great, do nothing;
@@ -549,7 +567,7 @@ namespace eligRequest
         }
 
         public static void Loop2120C() //SUBSCRIBER BENEFIT RELATED ENTITY NAME
-        { 
+        {
             inLoop2120C = true;
             while (currentSeg == "NM1")
             {
@@ -557,13 +575,13 @@ namespace eligRequest
                 getNextSeg();
             }
 
-            if (currentSeg == "N3") 
+            if (currentSeg == "N3")
             {
                 n3();
                 getNextSeg();
             }
 
-            if (currentSeg == "N4") 
+            if (currentSeg == "N4")
             {
                 n4();
                 getNextSeg();
@@ -575,7 +593,7 @@ namespace eligRequest
                 getNextSeg();
             }
 
-            if (currentSeg == "PRV") 
+            if (currentSeg == "PRV")
             {
                 prv();
                 getNextSeg();
@@ -594,7 +612,8 @@ namespace eligRequest
                 while (currentSeg == "TRN")
                 {
                     dependentTaceNumber = getSeg(currentLine, 2);
-                    Console.WriteLine("dependentTaceNumber: " + dependentTaceNumber);
+                    Console.WriteLine("dependentTaceNumber: " + dependentTaceNumber); //////////////////// write
+                    elig271List.Add("dependentTaceNumber: " + dependentTaceNumber);
                     getNextSeg();
                 }
 
@@ -735,7 +754,7 @@ namespace eligRequest
             if (currentSeg == "LS")
             {
                 if (getSeg(currentLine, 1) == "2120")
-                { 
+                {
                     // great, do nothing
                 }
                 getNextSeg();
@@ -749,7 +768,7 @@ namespace eligRequest
             if (currentSeg == "LE")
             {
                 if (getSeg(currentLine, 1) == "2120")
-                { 
+                {
                     // great, do nothing
                 }
                 getNextSeg();
@@ -896,13 +915,14 @@ namespace eligRequest
             {
                 objNm1.lineToWrite += "   ";
             }
-            Console.WriteLine(objNm1.lineToWrite); //////////////////// writeln OBJ
+            elig271List.Add(objNm1.lineToWrite);
+            //Console.WriteLine(objNm1.lineToWrite); //////////////////// writeln OBJ
         }
 
         public static void per()
         {
             elig271.objPer objPer = new elig271.objPer();
-            
+
             string contactName;
             //string communicationNumberQual;
             string communicationNumber;
@@ -921,25 +941,29 @@ namespace eligRequest
 
             if (contactName != "")
             {
-                Console.WriteLine("   " + contactName); //////////////////// writeln
+                //Console.WriteLine("   " + contactName); //////////////////// writeln OBJ
+                elig271List.Add("   " + contactName);
             }
 
             if (objPer.communicationNumberQual != "")
             {
                 objPer.communicationNumberQual = objPer.communicationNumberQual + ": " + communicationNumber;
-                Console.WriteLine("   " + objPer.communicationNumberQual); //////////////////// writeln
+                //Console.WriteLine("   " + objPer.communicationNumberQual); //////////////////// writeln OBJ
+                elig271List.Add("   " + objPer.communicationNumberQual);
             }
 
             if (objPer.communicationNumberQual2 != "")
             {
                 objPer.communicationNumberQual2 = objPer.communicationNumberQual2 + ": " + communicationNumber2;
-                Console.WriteLine("   " + objPer.communicationNumberQual2); //////////////////// writeln
+                //Console.WriteLine("   " + objPer.communicationNumberQual2); //////////////////// writeln OBJ
+                elig271List.Add("   " + objPer.communicationNumberQual2);
             }
 
             if (objPer.communicationNumberQual3 != "")
             {
                 objPer.communicationNumberQual3 = objPer.communicationNumberQual3 + ": " + communicationNumber3;
-                Console.WriteLine("   " + objPer.communicationNumberQual3); //////////////////// writeln
+                //Console.WriteLine("   " + objPer.communicationNumberQual3); //////////////////// writeln OBJ
+                elig271List.Add("   " + objPer.communicationNumberQual3);
             }
 
             if (inLoop2120C)
@@ -956,12 +980,14 @@ namespace eligRequest
 
             if (objN3.address1 != "")
             {
-                Console.WriteLine("     " + objN3.address1); //////////////////// writeln OBJ
+                //Console.WriteLine("     " + objN3.address1); //////////////////// writeln OBJ
+                elig271List.Add("     " + objN3.address1);
             }
 
             if (objN3.address2 != "")
             {
-                Console.WriteLine("     " + objN3.address2); //////////////////// writeln OBJ
+                //Console.WriteLine("     " + objN3.address2); //////////////////// writeln OBJ
+                elig271List.Add("     " + objN3.address2);
             }
 
             if (inLoop2100C)
@@ -1007,7 +1033,8 @@ namespace eligRequest
                 // addToBothCSVs(header,'InsuredZip',get(s,3)); //////////////////// addToBothCSVs
             }
 
-            Console.WriteLine("     " + objN4.cityStateZip); //////////////////// writeln OBJ
+            //Console.WriteLine("     " + objN4.cityStateZip); //////////////////// writeln OBJ
+            elig271List.Add("     " + objN4.cityStateZip);
         }
 
         public static void reff()
@@ -1023,13 +1050,15 @@ namespace eligRequest
             if (refIDQual != "Submitter Identification Number")
             {
                 objReff.refWrite = refIDQual + ": " + refID;
-                Console.Write("    " + objReff.refWrite); //////////////////// write OBJ
+                //Console.Write("    " + objReff.refWrite); //////////////////// write OBJ
+                elig271List.Add("     " + objReff.refWrite);
             }
 
             if (objReff.refName != "")
             {
                 objReff.refName = "(" + objReff.refName + ")";
-                Console.WriteLine(objReff.refName); //////////////////// writeln OBJ
+                //Console.WriteLine(objReff.refName); //////////////////// writeln OBJ
+                elig271List.Add(objReff.refName);
             }
             else
             {
@@ -1072,7 +1101,8 @@ namespace eligRequest
             {
                 //Use this code to indicate that a change has been made to the primary elements that identify a specific person. Such elements are first name, last name, date of birth, identification numbers, and address.
                 objIns.insNote = "Note: Subscriber information has changed from the information you submitted";
-                Console.WriteLine(objIns.insNote); //////////////////// writeln OBJ
+                //Console.WriteLine(objIns.insNote); //////////////////// writeln OBJ
+                elig271List.Add(objIns.insNote);
             }
 
             objIns.studentStatusCode = getIniValue("INS09", getSeg(currentLine, 9));
@@ -1081,19 +1111,22 @@ namespace eligRequest
             if (objIns.studentStatusCode != "")
             {
                 objIns.studentStatusCode = "Student: " + objIns.studentStatusCode;
-                Console.WriteLine(objIns.studentStatusCode); //////////////////// writeln OBJ
+                //Console.WriteLine(objIns.studentStatusCode); //////////////////// writeln OBJ
+                elig271List.Add(objIns.studentStatusCode);
             }
 
             if (objIns.handicapIndicator != "")
             {
                 objIns.handicapIndicator = "Handicap: " + objIns.handicapIndicator;
-                Console.WriteLine(objIns.handicapIndicator); //////////////////// writeln OBJ
+                //Console.WriteLine(objIns.handicapIndicator); //////////////////// writeln OBJ
+                elig271List.Add(objIns.handicapIndicator);
             }
 
             if (objIns.birthSequenceNumber != "")
             {
                 objIns.birthSequenceNumber = "Birth Sequence Number: " + objIns.birthSequenceNumber;
-                Console.WriteLine(objIns.birthSequenceNumber); //////////////////// writeln OBJ
+                //Console.WriteLine(objIns.birthSequenceNumber); //////////////////// writeln OBJ
+                elig271List.Add(objIns.birthSequenceNumber);
             }
 
         }
@@ -1115,8 +1148,10 @@ namespace eligRequest
             {
                 objDmg.gender = "Gender: " + objDmg.gender;
             }
-            Console.WriteLine(objDmg.birthDate); //////////////////// writeln OBJ
-            Console.WriteLine(objDmg.gender); //////////////////// writeln OBJ
+            //Console.WriteLine(objDmg.birthDate); //////////////////// writeln OBJ
+            //Console.WriteLine(objDmg.gender); //////////////////// writeln OBJ
+            elig271List.Add(objDmg.birthDate);
+            elig271List.Add(objDmg.gender);
 
             // addToBothCSVs(header,'InsuredDOB',birthDate); //////////////////// addToBothCSVs
             // addToBothCSVs(header,'InsuredSex',gender); //////////////////// addToBothCSVs
@@ -1141,7 +1176,8 @@ namespace eligRequest
 
             objDtp.dateTimeTotal = dateTimeQual + ": " + dateTimePeriod;
 
-            Console.WriteLine("     " + objDtp.dateTimeTotal); //////////////////// writeln OBJ
+            //Console.WriteLine("     " + objDtp.dateTimeTotal); //////////////////// writeln OBJ
+            elig271List.Add("     " + objDtp.dateTimeTotal);
 
             if (inLoop2120C)
             {
@@ -1158,10 +1194,11 @@ namespace eligRequest
             elig271.objPrv objPrv = new elig271.objPrv();
 
             string providerCode = getIniValue("PRV01", getSeg(currentLine, 1)); //prv01
-            string referenceIDQualifier = getIniValue("PRV02",getSeg(currentLine, 2));     //prv02
+            string referenceIDQualifier = getIniValue("PRV02", getSeg(currentLine, 2));     //prv02
             string providerID = getSeg(currentLine, 3);
             objPrv.prvWrite = providerCode + " " + referenceIDQualifier + ": " + providerID;
-            Console.WriteLine("     " + objPrv.prvWrite); //////////////////// writeln OBJ
+            //Console.WriteLine("     " + objPrv.prvWrite); //////////////////// writeln OBJ
+            elig271List.Add("     " + objPrv.prvWrite);
         }
 
         public static void aaa()
@@ -1182,19 +1219,23 @@ namespace eligRequest
             {
                 objAaa.validRequestIndicatorY = "This request was valid, however the transaction was rejected due to the following reason:";
                 //objAaa.validRequestIndicatorY = validRequestIndicatorY;
-                Console.WriteLine(objAaa.validRequestIndicatorY); //////////////////// writeln OBJ
+                //Console.WriteLine(objAaa.validRequestIndicatorY); //////////////////// writeln OBJ
+                elig271List.Add(objAaa.validRequestIndicatorY);
             }
             else
             {
                 objAaa.validRequestIndicatorN = "This request or an element in this request was NOT valid. This transaction was rejected due to the following reason:";
                 //objAaa.validRequestIndicatorN = validRequestIndicatorN;
-                Console.WriteLine(objAaa.validRequestIndicatorN); //////////////////// writeln OBJ
+                //Console.WriteLine(objAaa.validRequestIndicatorN); //////////////////// writeln OBJ
+                elig271List.Add(objAaa.validRequestIndicatorN);
             }
             objAaa.rejectReason = getIniValue("AAA03", rejectReasonCode);
             objAaa.followUpAction = getIniValue("AAA04", followUpActionCode);
-            Console.WriteLine(objAaa.rejectReasonCode + ": " + objAaa.rejectReason); //////////////////// writeln OBJ
-            Console.WriteLine(objAaa.followUpAction); //////////////////// writeln OBJ
+            //Console.WriteLine(objAaa.rejectReasonCode + ": " + objAaa.rejectReason); //////////////////// writeln OBJ
+            //Console.WriteLine(objAaa.followUpAction); //////////////////// writeln OBJ
             Console.WriteLine(""); //////////////////// writeln
+            elig271List.Add(objAaa.rejectReasonCode + ": " + objAaa.rejectReason);
+            elig271List.Add(objAaa.followUpAction);
 
             // addToBothCSVs(header,'Error',rejectReasonCode+': '+getIniValue('AAA03',rejectReasonCode)); //////////////////// addToBothCSVs
         }
@@ -1215,12 +1256,13 @@ namespace eligRequest
             }
 
             objIii.iiiWrite = codeListQualifierCode + ": " + industryCode;
-            Console.WriteLine("     " + objIii.iiiWrite); //////////////////// writeln OBJ
+            //Console.WriteLine("     " + objIii.iiiWrite); //////////////////// writeln OBJ
+            elig271List.Add("     " + objIii.iiiWrite);
 
             // addToBothCSVs(header,'QualCode',codeListQualifierCode); //////////////////// addToBothCSVs
             // addToBothCSVs(header,'Code', industryCode); //////////////////// addToBothCSVs
         }
-       
+
         public static void eb()
         {
             elig271.objEb objEb = new elig271.objEb();
@@ -1250,8 +1292,8 @@ namespace eligRequest
             int i = 1;
             while (getsub(currentLine, repetitionDelim, 3, i) != "")
             {
-               serviceTypeCodes.Add(getIniValue("EB03", getsub(currentLine, repetitionDelim, 3, i)));
-               i++;
+                serviceTypeCodes.Add(getIniValue("EB03", getsub(currentLine, repetitionDelim, 3, i)));
+                i++;
             }
             serviceTypeCode = getIniValue("EB03", getSeg(currentLine, 3));
             objEb.insuranceTypeCode = getIniValue("EB04", getSeg(currentLine, 4));
@@ -1285,14 +1327,15 @@ namespace eligRequest
                     objEb.diagPointer += "," + getsub(currentLine, subElementDelim, 14, i);
                 }
             }
-            
+
             if (getIniValue("EB03", getSeg(lastEB, 3)) != serviceTypeCode)
             {
                 Console.WriteLine(""); //////////////////// writeln
-                for (i = 0; i < serviceTypeCodes.Count - 1; i++) 
+                for (i = 0; i < serviceTypeCodes.Count - 1; i++)
                 {
                     objEb.serviceTypeCodeWrite = serviceTypeCodes[i] + " - " + getsub(currentLine, repetitionDelim, 3, i + 1);
-                    Console.WriteLine(objEb.serviceTypeCodeWrite); //////////////////// writeln OBJ
+                    //Console.WriteLine(objEb.serviceTypeCodeWrite); //////////////////// writeln OBJ
+                    elig271List.Add(objEb.serviceTypeCodeWrite);
                 }
                 lastEB = "";
             }
@@ -1302,11 +1345,13 @@ namespace eligRequest
                 if (objEb.eligibilityInfo.ToUpper().IndexOf("ACTIVE") != 0)
                 {
                     objEb.eligibilityInfo = "Status: " + objEb.eligibilityInfo;
-                    Console.WriteLine(objEb.eligibilityInfo); //////////////////// writeln OBJ
+                    //Console.WriteLine(objEb.eligibilityInfo); //////////////////// writeln OBJ
+                    elig271List.Add(objEb.eligibilityInfo);
                 }
                 else
                 {
-                    Console.WriteLine(" " + objEb.eligibilityInfo); //////////////////// writeln OBJ
+                    //Console.WriteLine(" " + objEb.eligibilityInfo); //////////////////// writeln OBJ
+                    elig271List.Add(" " + objEb.eligibilityInfo);
                 }
                 lastEB = "EB*" + objEb.eligibilityInfo;
             }
@@ -1314,7 +1359,8 @@ namespace eligRequest
             if ((getIniValue("EB02", getSeg(lastEB, 2)) != objEb.coverageLevelCode) && (objEb.coverageLevelCode != ""))
             {
                 objEb.coverageLevelCode = "Coverage Level: " + objEb.coverageLevelCode;
-                Console.WriteLine(" " + objEb.coverageLevelCode); //////////////////// writeln OBJ
+                //Console.WriteLine(" " + objEb.coverageLevelCode); //////////////////// writeln OBJ
+                elig271List.Add(" " + objEb.coverageLevelCode);
                 lastEB = "EB*" + objEb.eligibilityInfo;
             }
 
@@ -1324,29 +1370,34 @@ namespace eligRequest
                 {
                     objEb.insuranceTypeCode = objEb.insuranceTypeCode + " (" + planCoverageDesc + ")";
                 }
-                Console.WriteLine("  " + objEb.insuranceTypeCode); //////////////////// writeln OBJ
+                //Console.WriteLine("  " + objEb.insuranceTypeCode); //////////////////// writeln OBJ
+                elig271List.Add("  " + objEb.insuranceTypeCode);
                 lastEB = "EB*" + objEb.eligibilityInfo + "*" + objEb.coverageLevelCode;
             }
 
             if (objEb.benefitAmount != "")
             {
                 objEb.benefitAmount = "Amount: $" + objEb.benefitAmount;
-                Console.Write(objEb.benefitAmount); //////////////////// write OBJ
+                //Console.Write(objEb.benefitAmount); //////////////////// write OBJ
+                elig271List.Add(objEb.benefitAmount);
             }
-            if (objEb.benefitPercent != "") 
+            if (objEb.benefitPercent != "")
             {
                 objEb.benefitPercent = "Percent: " + float.Parse(objEb.benefitPercent) * 100 + "%";
-                Console.Write(objEb.benefitPercent); //////////////////// write OBJ
+                //Console.Write(objEb.benefitPercent); //////////////////// write OBJ
+                elig271List.Add(objEb.benefitPercent);
             }
             if ((objEb.benefitAmount != "") || (objEb.benefitPercent != ""))
             {
                 if (objEb.timePeriodQual == "Remaining")
                 {
-                    Console.Write(" " + objEb.timePeriodQual); //////////////////// write OBJ
+                    //Console.Write(" " + objEb.timePeriodQual); //////////////////// write OBJ
+                    elig271List.Add(" " + objEb.timePeriodQual);
                 }
                 else if (objEb.timePeriodQual != "")
                 {
-                    Console.Write("  per " + objEb.timePeriodQual); //////////////////// write OBJ
+                    //Console.Write("  per " + objEb.timePeriodQual); //////////////////// write OBJ
+                    elig271List.Add("  per " + objEb.timePeriodQual);
                 }
                 Console.WriteLine(""); //////////////////// writeln
             }
@@ -1354,50 +1405,59 @@ namespace eligRequest
             {
                 if (objEb.timePeriodQual != "")
                 {
-                    Console.WriteLine("    " + objEb.timePeriodQual); //////////////////// writeln OBJ
+                    //Console.WriteLine("    " + objEb.timePeriodQual); //////////////////// writeln OBJ
+                    elig271List.Add("    " + objEb.timePeriodQual);
                 }
             }
 
             if ((benefitQuantity != "") && (objEb.quantityQualifier != ""))
             {
                 objEb.benefitQuanQual = benefitQuantity + " " + objEb.quantityQualifier;
-                Console.WriteLine("      " + objEb.benefitQuanQual); //////////////////// writeln OBJ
+                //Console.WriteLine("      " + objEb.benefitQuanQual); //////////////////// writeln OBJ
+                elig271List.Add("      " + objEb.benefitQuanQual);
             }
-            else if (objEb.quantityQualifier != "") 
+            else if (objEb.quantityQualifier != "")
             {
-                Console.WriteLine("      " + objEb.quantityQualifier); //////////////////// writeln OBJ
+                //Console.WriteLine("      " + objEb.quantityQualifier); //////////////////// writeln OBJ
+                elig271List.Add("      " + objEb.quantityQualifier);
             }
             if (objEb.authOrCertIndicator != "")
             {
                 objEb.authOrCertIndicator = "Authorization or Certificate Required: " + objEb.authOrCertIndicator;
-                Console.WriteLine("       " + objEb.authOrCertIndicator); //////////////////// writeln OBJ
+                //Console.WriteLine("       " + objEb.authOrCertIndicator); //////////////////// writeln OBJ
+                elig271List.Add("       " + objEb.authOrCertIndicator);
             }
             if (inPlanNetworkIndicator == "Y")
             {
                 objEb.inPlanNetworkIndicatorY = "Benefits are In-Plan-Network";
-                Console.WriteLine("       " + objEb.inPlanNetworkIndicatorY); //////////////////// writeln OBJ
+                //Console.WriteLine("       " + objEb.inPlanNetworkIndicatorY); //////////////////// writeln OBJ
+                elig271List.Add("       " + objEb.inPlanNetworkIndicatorY);
             }
             else if (inPlanNetworkIndicator == "N")
             {
                 objEb.inPlanNetworkIndicatorN = "Benefits are Out-Of-Plan-Network";
-                Console.WriteLine("       " + objEb.inPlanNetworkIndicatorN); //////////////////// writeln OBJ
+                //Console.WriteLine("       " + objEb.inPlanNetworkIndicatorN); //////////////////// writeln OBJ
+                elig271List.Add("       " + objEb.inPlanNetworkIndicatorN);
             }
             if (productServiceIDQual != "")
             {
                 if (procedureCode == "G0180")
                 {
                     objEb.G0180 = "Home Health Certification (G0180)";
-                    Console.WriteLine("    " + objEb.G0180); //////////////////// writeln OBJ
+                    //Console.WriteLine("    " + objEb.G0180); //////////////////// writeln OBJ
+                    elig271List.Add("    " + objEb.G0180);
                 }
                 else if (procedureCode == "G0179")
                 {
                     objEb.G0179 = "Home Health Recertification (G0179)";
-                    Console.WriteLine("   " + objEb.G0179); //////////////////// writeln OBJ
+                    //Console.WriteLine("   " + objEb.G0179); //////////////////// writeln OBJ
+                    elig271List.Add("   " + objEb.G0179);
                 }
                 else
                 {
                     objEb.prodProc = productServiceIDQual + ": " + procedureCode;
-                    Console.WriteLine("       " + objEb.prodProc); //////////////////// writeln OBJ
+                    //Console.WriteLine("       " + objEb.prodProc); //////////////////// writeln OBJ
+                    elig271List.Add("       " + objEb.prodProc);
                 }
 
             }
@@ -1405,12 +1465,14 @@ namespace eligRequest
             if (objEb.procedureModifier != "")
             {
                 objEb.procedureModifier = "Modifiers: " + objEb.procedureModifier;
-                Console.WriteLine("        " + objEb.procedureModifier); //////////////////// writeln OBJ
+                //Console.WriteLine("        " + objEb.procedureModifier); //////////////////// writeln OBJ
+                elig271List.Add("        " + objEb.procedureModifier);
             }
             if (objEb.diagPointer != "")
             {
                 objEb.diagPointer = "Diag Pointers: " + objEb.diagPointer;
-                Console.WriteLine("        " + objEb.diagPointer); //////////////////// writeln OBJ
+                //Console.WriteLine("        " + objEb.diagPointer); //////////////////// writeln OBJ
+                elig271List.Add("        " + objEb.diagPointer);
             }
             lastEB = currentLine;
 
@@ -1423,7 +1485,7 @@ namespace eligRequest
                 // addToBothCSVs(header,'EligInfo'+inttostr(ebCount),eligibilityInfo); //////////////////// addToBothCSVs
                 // addToBothCSVs(header,'CoveLeve'+inttostr(ebCount), coverageLevelCode); //////////////////// addToBothCSVs
 
-                for(i = 0; i < serviceTypeCodes.Count(); i++)
+                for (i = 0; i < serviceTypeCodes.Count(); i++)
                 {
                     // addToBothCSVs(header,'ServTypeCode'+inttostr(ebCount)+inttostr(i),serviceTypeCodes[i]); //////////////////// addToBothCSVs
                 }
@@ -1492,7 +1554,7 @@ namespace eligRequest
                 {
                     if ((timePeriodQualifier == "Exceeded") && (unitOrBasisForMeasurementCode == "Days"))
                     {
-                        quantity3 = " From Day " + (Int32.Parse(periodCount)+1).ToString();
+                        quantity3 = " From Day " + (Int32.Parse(periodCount) + 1).ToString();
                     }
                     else if ((timePeriodQualifier == "Not Exceeded") && (unitOrBasisForMeasurementCode == "Days"))
                     {
@@ -1500,7 +1562,7 @@ namespace eligRequest
                     }
                     else if ((periodCount != "") && (unitOrBasisForMeasurementCode != ""))
                     {
-                        quantity3 = " for " + periodCount + " " + unitOrBasisForMeasurementCode + " " +timePeriodQualifier;
+                        quantity3 = " for " + periodCount + " " + unitOrBasisForMeasurementCode + " " + timePeriodQualifier;
                     }
                     else if (periodCount != "")
                     {
@@ -1515,7 +1577,8 @@ namespace eligRequest
 
             quantity4 = " " + deliveryFrequencyCode + " " + deliveryPatternTimeCode;
             objHsd.quant = quantity + quantity2 + quantity3 + quantity4;
-            Console.WriteLine("     " + objHsd.quant); //////////////////// writeln OBJ
+            //Console.WriteLine("     " + objHsd.quant); //////////////////// writeln OBJ
+            elig271List.Add("     " + objHsd.quant);
 
             //addToBothCSVs(header,'QuanQual',quantityQualifier); //////////////////// addToBothCSVs
             //addToBothCSVs(header,'Quan',benefitQuantity); //////////////////// addToBothCSVs
@@ -1525,7 +1588,7 @@ namespace eligRequest
             //addToBothCSVs(header,'NumberOfPeriods',periodCount); //////////////////// addToBothCSVs
             //addToBothCSVs(header,'DeliFreqCode',deliveryFrequencyCode); //////////////////// addToBothCSVs
             //addToBothCSVs(header,'DeliPattTimeCode',deliveryPatternTimeCode); //////////////////// addToBothCSVs
-           
+
         }
 
         public static void msg()
@@ -1533,7 +1596,8 @@ namespace eligRequest
             elig271.objMsg objMsg = new elig271.objMsg();
 
             objMsg.freeFormMessageText = getSeg(currentLine, 1);
-            Console.WriteLine("     " + objMsg.freeFormMessageText); //////////////////// writeln OBJ
+            //Console.WriteLine("     " + objMsg.freeFormMessageText); //////////////////// writeln OBJ
+            elig271List.Add("     " + objMsg.freeFormMessageText);
 
             //addToBothCSVs(header,'EBMessText',freeformMessageText); //////////////////// addToBothCSVs
         }
@@ -1576,7 +1640,7 @@ namespace eligRequest
             }
 
         }
-        
+
         // gets segment of line
         public static string getSeg(string currentLine, int index)
         {
@@ -1601,7 +1665,7 @@ namespace eligRequest
         public static string getsub(string currentLine, char delim, int index)
         {
             // inc(index);
-            if ((currentLine != "") && (currentLine[currentLine.Length - 1 ] == segmentDelim))
+            if ((currentLine != "") && (currentLine[currentLine.Length - 1] == segmentDelim))
             {
                 currentLine = getNextLine();
                 currentLine = currentLine.TrimEnd(segmentDelim);
@@ -1623,12 +1687,12 @@ namespace eligRequest
         {
             string d = ",";
 
-            if ((s2.Length >= 2) && (s2[0] == '|') && (s2[2] == '|')) 
+            if ((s2.Length >= 2) && (s2[0] == '|') && (s2[2] == '|'))
             {
-              d = Char.ToString(s2[1]);
-              s2 = s2.Remove(0, 3);
+                d = Char.ToString(s2[1]);
+                s2 = s2.Remove(0, 3);
             }
-            
+
             s2 = d + s2 + d;
             string result = string.Empty;
             for (int i = 1; i <= n; i++)
@@ -1660,4 +1724,3 @@ namespace eligRequest
         }
     }
 }
-
